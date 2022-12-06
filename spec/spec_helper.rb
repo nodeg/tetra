@@ -20,7 +20,6 @@ RSpec.configure do |config|
   # set up aruba API
   config.before(:each) do
     restore_env
-    setup_aruba
   end
 end
 
