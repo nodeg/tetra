@@ -20,6 +20,7 @@ RSpec.configure do |config|
   # set up aruba API
   config.before(:each) do
     restore_env
+    clean_current_dir
   end
 end
 
