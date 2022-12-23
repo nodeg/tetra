@@ -6,8 +6,6 @@ require "simplecov"
 
 require "tetra"
 
-SimpleCov.start
-
 # configure aruba for rspec use
 RSpec.configure do |config|
   config.include Aruba::Api
@@ -18,7 +16,7 @@ RSpec.configure do |config|
   end
 
   # set up aruba API
-  config.before(:each) { setup_aruba }
+  # config.before(:each) { setup_aruba }
 end
 
 module Tetra
