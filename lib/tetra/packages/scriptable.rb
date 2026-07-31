@@ -44,8 +44,5 @@ module Tetra
 
       cmds
     end
-
-    # Alias for backward compatibility if other classes call 'aliases'
-    alias aliases generate_aliases
   end
 end
