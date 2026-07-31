@@ -23,7 +23,9 @@ module Tetra
       log.debug("Attempting unpack of #{file} to find a POM")
       begin
         Zip::File.foreach(file) do |entry|
-          # Security check (Zip Slip)
+          # Defense in depth against malicious entry names. Note this method
+          # never extracts entries to disk (only reads pom.xml into memory),
+          # so Zip Slip path traversal is not actually reachable here.
           next if entry.name.include?("..") || entry.name.start_with?("/")
 
           # PERFORMANCE: end_with? is much faster than Regexp for simple suffixes
