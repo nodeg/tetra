@@ -77,7 +77,9 @@ module Tetra
         when Net::HTTPSuccess
           response.body
         when Net::HTTPRedirection
-          location = response["location"]
+          # Location may be relative (RFC 7231); resolve it against the
+          # current URI so relative redirects don't crash Net::HTTP.start.
+          location = (uri + response["location"]).to_s
           log.info("Redirected to #{location}")
           # Recursive call to follow redirect (params are usually part of the new URL)
           fetch(location, {}, limit - 1)
