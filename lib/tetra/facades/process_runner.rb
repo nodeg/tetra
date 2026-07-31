@@ -11,61 +11,18 @@ module Tetra
     def run(commandline, echo = false, stdin_data = nil)
       log.debug "running `#{commandline}`"
 
-      # Prepare buffers to capture output
       out_buffer = StringIO.new
       err_buffer = StringIO.new
-      exit_status = nil
       # Flatten handles nested arrays, Compact removes nils
       cmd_args = Array(commandline).flatten.compact.map(&:to_s)
 
-      Open3.popen3(*cmd_args) do |stdin, stdout, stderr, wait_thr|
-        # 1. Handle Input (if any)
-        stdin.write(stdin_data) if stdin_data
-        stdin.close # Close stdin so the process knows input is finished
+      exit_status = spawn_and_capture(cmd_args, stdin_data, echo, out_buffer, err_buffer)
 
-        # Use threads to read stdout and stderr simultaneously.
-        readers = []
+      out = out_buffer.string
+      err = err_buffer.string
+      raise_execution_failed(commandline, exit_status, out, err) unless exit_status.success?
 
-        readers << Thread.new do
-          stdout.each_line do |line|
-            print line if echo       # Echo to real STDOUT if requested
-            out_buffer << line       # Capture to memory
-          end
-        end
-
-        readers << Thread.new do
-          stderr.each_line do |line|
-            $stderr.print line if echo # Echo to real STDERR if requested
-            err_buffer << line         # Capture to memory
-          end
-        end
-
-        # Wait for reading to finish
-        readers.each(&:join)
-
-        # Get the exit code
-        exit_status = wait_thr.value
-      end
-
-      # Check for failure
-      unless exit_status.success?
-        # Extract strings from buffers
-        out = out_buffer.string
-        err = err_buffer.string
-
-        log.warn("`#{commandline}` failed with status #{exit_status.exitstatus}")
-
-        if !out.empty? || !err.empty?
-          log.warn("Output follows:")
-          log.warn(out) unless out.empty?
-          log.warn(err) unless err.empty?
-        end
-
-        fail ExecutionFailed.new(commandline, exit_status.exitstatus, out, err)
-      end
-
-      # Return the standard output
-      out_buffer.string
+      out
     end
 
     # runs an interactive executable in a subshell
@@ -79,6 +36,48 @@ module Tetra
       log.debug "`#{command}` exited with success #{success}"
 
       fail ExecutionFailed.new(command, $CHILD_STATUS.exitstatus, nil, nil) unless success
+    end
+
+    private
+
+    # spawns commandline, writing stdin and reading stdout/stderr concurrently
+    # (writing stdin to completion before draining stdout/stderr can deadlock
+    # if the child fills its output pipe buffer before consuming all of stdin)
+    # returns the resulting Process::Status
+    def spawn_and_capture(cmd_args, stdin_data, echo, out_buffer, err_buffer)
+      Open3.popen3(*cmd_args) do |stdin, stdout, stderr, wait_thr|
+        threads = [
+          Thread.new { write_stdin(stdin, stdin_data) },
+          Thread.new { pipe_to_buffer(stdout, out_buffer, echo ? $stdout : nil) },
+          Thread.new { pipe_to_buffer(stderr, err_buffer, echo ? $stderr : nil) }
+        ]
+        threads.each(&:join)
+
+        wait_thr.value
+      end
+    end
+
+    def write_stdin(stdin, stdin_data)
+      stdin.write(stdin_data) if stdin_data
+      stdin.close # Close stdin so the process knows input is finished
+    end
+
+    def pipe_to_buffer(io, buffer, echo_io)
+      io.each_line do |line|
+        echo_io&.print(line)
+        buffer << line
+      end
+    end
+
+    def raise_execution_failed(commandline, exit_status, out, err)
+      log.warn("`#{commandline}` failed with status #{exit_status.exitstatus}")
+      if !out.empty? || !err.empty?
+        log.warn("Output follows:")
+        log.warn(out) unless out.empty?
+        log.warn(err) unless err.empty?
+      end
+
+      fail ExecutionFailed.new(commandline, exit_status.exitstatus, out, err)
     end
   end
 
