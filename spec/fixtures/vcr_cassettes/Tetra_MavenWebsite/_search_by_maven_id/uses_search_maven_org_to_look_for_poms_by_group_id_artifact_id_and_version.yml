@@ -1,0 +1,61 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://search.maven.org/solrsearch/select?q=g:%22antlr%22%20AND%20a:%22antlrall%22%20AND%20v:%222.7.2%22&rows=100&wt=json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - search.maven.org
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '443'
+      Connection:
+      - keep-alive
+      Date:
+      - Sat, 01 Aug 2026 15:13:20 GMT
+      X-Query-String:
+      - q=g%3A%22antlr%22+AND+a%3A%22antlrall%22+AND+v%3A%222.7.2%22&core=&start=&rows=100&wt=json
+      Server:
+      - nginx
+      X-Request-Uri:
+      - "/solrsearch/select?q=g%3A%22antlr%22+AND+a%3A%22antlrall%22+AND+v%3A%222.7.2%22&rows=100&wt=json"
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 4188cf229d29949125e2eae413ee8a6a.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - FRA60-P12
+      X-Amz-Cf-Id:
+      - N9AsgcNwBFgk5p-n7u7GTlYfjRXHCW_qCTEvPwCZBkjkmjs2dcKcCg==
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - SAMEORIGIN
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000
+    body:
+      encoding: UTF-8
+      string: '{"responseHeader":{"status":0,"QTime":1,"params":{"q":"g:\"antlr\"
+        AND a:\"antlrall\" AND v:\"2.7.2\"","core":"","indent":"off","fl":"id,g,a,v,p,ec,timestamp,tags","start":"","sort":"score
+        desc,timestamp desc,g asc,a asc,v desc","rows":"100","wt":"json","version":"2.2"}},"response":{"numFound":1,"start":0,"docs":[{"id":"antlr:antlrall:2.7.2","g":"antlr","a":"antlrall","v":"2.7.2","p":"jar","timestamp":1182142732000,"ec":[".jar",".pom"]}]}}'
+  recorded_at: Sat, 01 Aug 2026 15:13:21 GMT
+recorded_with: VCR 6.4.0

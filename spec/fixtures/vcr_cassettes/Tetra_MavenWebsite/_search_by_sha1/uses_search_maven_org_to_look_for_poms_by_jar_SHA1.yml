@@ -1,0 +1,60 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://search.maven.org/solrsearch/select?q=1:%22546b5220622c4d9b2da45ad1899224b6ce1c8830%22&rows=100&wt=json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - search.maven.org
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '578'
+      Connection:
+      - keep-alive
+      Date:
+      - Sat, 01 Aug 2026 15:11:18 GMT
+      X-Query-String:
+      - q=1%3A%22546b5220622c4d9b2da45ad1899224b6ce1c8830%22&core=&start=&rows=100&wt=json
+      Server:
+      - nginx
+      X-Request-Uri:
+      - "/solrsearch/select?q=1%3A%22546b5220622c4d9b2da45ad1899224b6ce1c8830%22&rows=100&wt=json"
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 a6665fb360a5f54fc8b94f7b2c566192.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - FRA60-P12
+      X-Amz-Cf-Id:
+      - ls1ZExqIM8CWWBP-MqTOOk_u3CyfX5s4bTBjyczL7DLUcAxdG6c1Bw==
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - SAMEORIGIN
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000
+    body:
+      encoding: UTF-8
+      string: '{"responseHeader":{"status":0,"QTime":0,"params":{"q":"1:\"546b5220622c4d9b2da45ad1899224b6ce1c8830\"","core":"","indent":"off","fl":"id,g,a,v,p,ec,timestamp,tags","start":"","sort":"score
+        desc,timestamp desc,g asc,a asc,v desc","rows":"100","wt":"json","version":"2.2"}},"response":{"numFound":2,"start":0,"docs":[{"id":"antlr:antlrall:2.7.2","g":"antlr","a":"antlrall","v":"2.7.2","p":"jar","timestamp":1182142732000,"ec":[".jar",".pom"]},{"id":"antlr:antlr:2.7.2","g":"antlr","a":"antlr","v":"2.7.2","p":"jar","timestamp":1131488123000,"ec":["-sources.jar",".jar",".pom"]}]}}'
+  recorded_at: Sat, 01 Aug 2026 15:11:18 GMT
+recorded_with: VCR 6.4.0

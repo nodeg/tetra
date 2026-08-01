@@ -1,0 +1,59 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/antlr/antlrall/2.7.2/antlrall-2.7.2.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - repo1.maven.org
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 01 Aug 2026 15:13:21 GMT
+      Content-Type:
+      - text/xml
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cf-Ray:
+      - a245c94b1b58bce2-MUC
+      Cf-Cache-Status:
+      - HIT
+      X-Checksum-Sha1:
+      - a2905de22580a00a4209e5873b87828eab1eee58
+      Age:
+      - '1354740'
+      X-Checksum-Md5:
+      - '08b6dd9992e9ccb98394171b6a63693f'
+      Last-Modified:
+      - Mon, 18 Jun 2007 04:58:52 GMT
+      Etag:
+      - W/"08b6dd9992e9ccb98394171b6a63693f"
+      Server:
+      - cloudflare
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <project>
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>antlr</groupId>
+          <artifactId>antlrall</artifactId>
+          <version>2.7.2</version>
+        </project>
+  recorded_at: Sat, 01 Aug 2026 15:13:21 GMT
+recorded_with: VCR 6.4.0

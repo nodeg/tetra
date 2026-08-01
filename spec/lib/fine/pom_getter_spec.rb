@@ -3,7 +3,7 @@
 require "spec_helper"
 
 # rubocop:disable RSpec/SpecFilePathFormat
-describe Tetra::PomGetter do
+describe Tetra::PomGetter, :vcr do
   # rubocop:enable RSpec/SpecFilePathFormat
   let(:pom_getter) { described_class.new }
 

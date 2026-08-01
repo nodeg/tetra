@@ -11,6 +11,8 @@ gem "rubocop-rake", "~> 0.7"
 gem "rubocop-rspec", "~> 3.10"
 gem "simplecov", "~> 1.0"
 gem "simplecov-cobertura", "~> 4.0"
+gem "vcr", "~> 6.4"
+gem "webmock", "~> 3.26"
 
 # See tetra.gemspec
 gemspec

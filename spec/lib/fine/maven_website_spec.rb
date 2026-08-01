@@ -3,7 +3,7 @@
 require "spec_helper"
 
 # rubocop:disable RSpec/SpecFilePathFormat
-describe Tetra::MavenWebsite do
+describe Tetra::MavenWebsite, :vcr do
   # rubocop:enable RSpec/SpecFilePathFormat
   let(:site) { described_class.new }
 
