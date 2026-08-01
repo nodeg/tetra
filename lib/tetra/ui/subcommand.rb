@@ -25,15 +25,15 @@ module Tetra
 
     # maps verbosity options to log level
     def configure_log_level(verbose, very_verbose, very_very_verbose)
-      if very_very_verbose
-        log.level = ::Logger::DEBUG
-      elsif very_verbose
-        log.level = ::Logger::INFO
-      elsif verbose
-        log.level = ::Logger::WARN
-      else
-        log.level = ::Logger::ERROR
-      end
+      log.level = if very_very_verbose
+                    ::Logger::DEBUG
+                  elsif very_verbose
+                    ::Logger::INFO
+                  elsif verbose
+                    ::Logger::WARN
+                  else
+                    ::Logger::ERROR
+                  end
     end
 
     # override default option parsing to pass options to other commands
@@ -89,15 +89,15 @@ module Tetra
     def checking_exceptions
       yield
     rescue Errno::EACCES, Errno::ENOENT, Errno::EEXIST => e
-      $stderr.puts e
+      warn e
     rescue Tetra::NoProjectDirectoryError => e
-      $stderr.puts "#{e.directory} is not a tetra project directory, see \"tetra init\""
+      warn "#{e.directory} is not a tetra project directory, see \"tetra init\""
     rescue Tetra::GitAlreadyInitedError
-      $stderr.puts "This directory is already a tetra project"
+      warn "This directory is already a tetra project"
     rescue Tetra::ExecutionFailed => e
-      $stderr.puts "Failed to run `#{e.commandline}` (exit status #{e.status})"
+      warn "Failed to run `#{e.commandline}` (exit status #{e.status})"
     rescue Interrupt
-      $stderr.puts "Execution interrupted by the user"
+      warn "Execution interrupted by the user"
     end
 
     private

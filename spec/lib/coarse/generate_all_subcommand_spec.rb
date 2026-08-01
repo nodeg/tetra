@@ -67,10 +67,8 @@ describe "`tetra generate-all`", type: :aruba do
     expect(last_command_started.output).to include("commons-collections.spec generated")
     expect(last_command_started.output).to include("0001-Sources-updated.patch generated")
 
-    # rubocop:disable RSpec/ExpectActual
     spec_path = "../../packages/commons-collections/commons-collections.spec"
     expect(spec_path).to have_file_content(/0001-Sources-updated.patch/)
-    # rubocop:enable RSpec/ExpectActual
   end
   # rubocop:enable RSpec/ExampleLength
 
@@ -151,11 +149,9 @@ describe "`tetra generate-all`", type: :aruba do
     expect(last_command_started.output).to include("commons-collections.spec generated")
     expect(last_command_started.output).to include("0001-Sources-updated.patch generated")
 
-    # rubocop:disable RSpec/ExpectActual
     spec_path = "../../packages/commons-collections/commons-collections.spec"
     expect(spec_path).to have_file_content(/0001-Sources-updated.patch/)
     expect(spec_path).to have_file_content(/commons-collections.zip/)
-    # rubocop:enable RSpec/ExpectActual
   end
   # rubocop:enable RSpec/ExampleLength
 end

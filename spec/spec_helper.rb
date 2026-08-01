@@ -42,7 +42,7 @@ RSpec.configure do |config|
   # If running in a CI environment, use the verbose 'documentation' formatter
   config.formatter = :documentation if ENV["CI"]
 
-  config.around(:each) do |example|
+  config.around do |example|
     # Capture original state of all env vars we intend to touch
     original_env = {
       "PATH" => ENV.fetch("PATH", nil),
@@ -85,7 +85,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each) do
+  config.before do
     # Reset the LicenseMapper state before every single test
     Tetra::LicenseMapper.reset! if defined?(Tetra::LicenseMapper)
   end
@@ -98,7 +98,7 @@ module Tetra
     def create_mock_project
       @project_path = File.join("spec", "data", "test-project")
 
-      Tetra::Project.init(@project_path, false)
+      Tetra::Project.init(@project_path, include_bundled_software: false)
 
       @project = Tetra::Project.new(@project_path)
     end
@@ -116,7 +116,7 @@ module Tetra
         FileUtils.mkdir_p(dir)
         executable_path = mock_executable_path(executable_name)
         File.open(executable_path, "w") { |io| io.puts "echo $0 $*>test_out" }
-        File.chmod(0777, executable_path)
+        File.chmod(0o777, executable_path)
         executable_path
       end
     end

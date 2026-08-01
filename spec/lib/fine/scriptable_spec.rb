@@ -2,15 +2,19 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/SpecFilePathFormat
 describe Tetra::Scriptable do
+  # rubocop:enable RSpec/SpecFilePathFormat
   include Tetra::Mockers
 
-  before(:each) do
+  let(:project) { @project } # rubocop:disable RSpec/InstanceVariable
+
+  before do
     create_mock_project
 
-    @project.from_directory do
+    project.from_directory do
       FileUtils.mkdir_p(File.join("src", "test-package"))
-      @project.dry_run
+      project.dry_run
 
       history = [
         "tetra dry-run start --unwanted-options",
@@ -19,22 +23,22 @@ describe Tetra::Scriptable do
         "tetra dry-run finish -a"
       ]
 
-      @project.finish(history)
+      project.finish(history)
     end
 
     create_mock_executable("ant")
     create_mock_executable("mvn")
   end
 
-  after(:each) do
+  after do
     delete_mock_project
   end
 
   describe "#generate_build_script" do
     it "generates a build script from the history" do
-      @project.from_directory do
-        @package = Tetra::Package.new(@project)
-        @package.to_script
+      project.from_directory do
+        package = Tetra::Package.new(project)
+        package.to_script
 
         lines = File.readlines(File.join("packages", "test-project", "build.sh"))
 

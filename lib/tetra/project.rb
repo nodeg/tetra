@@ -31,11 +31,9 @@ module Tetra
     # finds the project directory up in the tree, like git does
     def self.find_project_dir(starting_dir)
       result = starting_dir
-      while project?(result) == false && result != "/"
-        result = File.expand_path("..", result)
-      end
+      result = File.expand_path("..", result) while project?(result) == false && result != "/"
 
-      fail NoProjectDirectoryError, starting_dir if result == "/"
+      raise NoProjectDirectoryError, starting_dir if result == "/"
 
       result
     end
@@ -61,7 +59,7 @@ module Tetra
     def dry_running?
       latest_comment = @git.latest_comment("tetra: dry-run-")
       # MODERNIZATION: Use match? instead of =~
-      !latest_comment.nil? && !latest_comment.match?(/tetra: dry-run-finished/)
+      !latest_comment.nil? && !latest_comment.include?("tetra: dry-run-finished")
     end
 
     # ends a dry-run assuming a successful build:
@@ -127,7 +125,7 @@ module Tetra
 
         previous_id = @git.latest_id(generated_comment)
 
-        File.open(path, "w") { |io| io.write(new_content) }
+        File.write(path, new_content)
         log.debug "committing new content: #{comment}"
         @git.commit_file(path, whole_comment)
 
@@ -136,7 +134,7 @@ module Tetra
           conflict_count = @git.merge_with_id(path, "#{path}.tetra_user_edited", previous_id)
           File.delete("#{path}.tetra_user_edited")
 
-          @git.commit_file(path, "User changes merged back") if conflict_count == 0
+          @git.commit_file(path, "User changes merged back") if conflict_count.zero?
 
           return conflict_count
         end
@@ -145,10 +143,8 @@ module Tetra
     end
 
     # runs a block from the project directory or a subdirectory
-    def from_directory(subdirectory = "")
-      Dir.chdir(File.join(@full_path, subdirectory)) do
-        yield
-      end
+    def from_directory(subdirectory = "", &)
+      Dir.chdir(File.join(@full_path, subdirectory), &)
     end
 
     # returns the latest dry run start directory
@@ -159,18 +155,16 @@ module Tetra
     # returns a list of files produced during the last dry-run
     def produced_files
       @git.latest_comment("tetra: dry-run-finished")
-        .split("\n")
-        .map { |line| line[%r{^tetra: file-changed: src/(.+)$}, 1] }
-        .compact
-        .sort
+          .split("\n")
+          .filter_map { |line| line[%r{^tetra: file-changed: src/(.+)$}, 1] }
+          .sort
     end
 
     def build_script_lines
       @git.latest_comment("tetra: dry-run-finished")
-        .split("\n")
-        .map { |line| line[/^tetra: build-script-line: (.+)$/, 1] }
-        .compact
-        .sort
+          .split("\n")
+          .filter_map { |line| line[/^tetra: build-script-line: (.+)$/, 1] }
+          .sort
     end
 
     # archives a tarball of kit/ in packages/
@@ -216,8 +210,8 @@ module Tetra
 
           # Calculate relative path for symlink
           link_target = Pathname.new(new_location)
-                        .relative_path_from(Pathname.new(file).dirname)
-                        .to_s
+                                .relative_path_from(Pathname.new(file).dirname)
+                                .to_s
 
           File.symlink(link_target, file)
           result << [file, new_location]
@@ -234,6 +228,7 @@ module Tetra
 
     def initialize(directory)
       @directory = directory
+      super("Not a tetra project directory: #{directory}")
     end
   end
 end

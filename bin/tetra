@@ -6,9 +6,7 @@
 # Copyright 2015 Silvio Moioli <moio@suse.de>
 
 # Add lib/ to load path if running from a git clone (dev mode)
-if File.exist?(File.join(__dir__, "..", ".git"))
-  $LOAD_PATH.unshift(File.join(__dir__, "..", "lib"))
-end
+$LOAD_PATH.unshift(File.join(__dir__, "..", "lib")) if File.exist?(File.join(__dir__, "..", ".git"))
 
 begin
   require "tetra"

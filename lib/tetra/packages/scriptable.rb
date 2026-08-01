@@ -13,7 +13,7 @@ module Tetra
           "cd #{project.latest_dry_run_directory}"
         ] + generate_aliases(project) + project.build_script_lines
 
-        new_content = script_lines.join("\n") + "\n"
+        new_content = "#{script_lines.join("\n")}\n"
 
         result_dir = File.join(project.packages_dir, project.name)
         FileUtils.mkdir_p(result_dir)

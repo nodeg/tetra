@@ -57,7 +57,7 @@ module Tetra
 
         if found_doc
           log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1} " \
-                   "(#{found_doc['g']}:#{found_doc['a']}:#{found_doc['v']})")
+                   "(#{found_doc["g"]}:#{found_doc["a"]}:#{found_doc["v"]})")
 
           group_id, artifact_id, version = site.get_maven_id_from(found_doc)
           return site.download_pom(group_id, artifact_id, version), :found_via_sha1

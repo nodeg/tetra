@@ -2,16 +2,19 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/SpecFilePathFormat
 describe Tetra::Kit do
+  # rubocop:enable RSpec/SpecFilePathFormat
   include Tetra::Mockers
 
-  before(:each) do
+  let(:project) { @project } # rubocop:disable RSpec/InstanceVariable
+  let(:instance) { described_class.new(project) }
+
+  before do
     create_mock_project
   end
 
-  let(:instance) { Tetra::Kit.new(@project) }
-
-  after(:each) do
+  after do
     delete_mock_project
   end
 

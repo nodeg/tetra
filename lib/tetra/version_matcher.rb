@@ -28,7 +28,7 @@ module Tetra
     def best_match(my_version, their_versions)
       return nil if their_versions.nil? || their_versions.empty?
 
-      log.debug("version comparison: #{my_version} vs #{their_versions.join(', ')}")
+      log.debug("version comparison: #{my_version} vs #{their_versions.join(", ")}")
 
       my_chunks = my_version.split(Tetra::CHUNK_SEPARATOR_VERSION_MATCHER)
 

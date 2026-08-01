@@ -3,7 +3,7 @@
 module Tetra
   # tetra generate-all
   class GenerateAllSubcommand < Tetra::Subcommand
-    option %w(-f --filter), "FILTER", "filter files to be installed by this package spec", default: "*.jar"
+    option %w[-f --filter], "FILTER", "filter files to be installed by this package spec", default: "*.jar"
     parameter "[POM]", "a package pom file path", default: "pom.xml"
 
     def execute

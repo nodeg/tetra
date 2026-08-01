@@ -17,11 +17,9 @@ module Tetra
     # inits a repo
     def init
       Dir.chdir(@directory) do
-        if Dir.exist?(".git")
-          fail GitAlreadyInitedError
-        else
-          git_cmd("init")
-        end
+        raise GitAlreadyInitedError if Dir.exist?(".git")
+
+        git_cmd("init")
       end
     end
 
@@ -127,14 +125,12 @@ module Tetra
                   "-L", "previously generated",
                   "-L", "user edited")
         rescue ExecutionFailed => e
-          if e.status > 0
-            conflict_count = e.status
-          else
-            raise e
-          end
+          raise e unless e.status.positive?
+
+          conflict_count = e.status
         ensure
           # Clean up the temporary file
-          File.delete(temp_old_version) if File.exist?(temp_old_version)
+          FileUtils.rm_f(temp_old_version)
         end
         conflict_count
       end
@@ -172,7 +168,7 @@ module Tetra
         statuses = Open3.pipeline(git_command, xz_command, out: destination_path)
 
         unless statuses.all?(&:success?)
-          fail ExecutionFailed.new(
+          raise ExecutionFailed.new(
             "git archive pipeline failed (exit codes: #{statuses.map(&:exitstatus)})",
             statuses.last.exitstatus
           )
@@ -193,11 +189,11 @@ module Tetra
 
     # Automatically passes "git" as the first argument in an Array.
     def git_cmd(*args)
-      run(["git"] + args)
+      run(["git"] + args, echo: false, stdin_data: nil)
     end
 
     def git_cmd_with_stdin(stdin_data, *args)
-      run(["git"] + args, false, stdin_data)
+      run(["git"] + args, echo: false, stdin_data: stdin_data)
     end
   end
 
