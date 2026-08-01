@@ -3,6 +3,7 @@
 require "spec_helper"
 
 describe "`tetra generate-all`", type: :aruba do
+  # rubocop:disable RSpec/ExampleLength
   it "generates specs and tarballs for a sample package, source archive workflow" do
     # Use binread for binary files
     archive_source = File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip")
@@ -15,16 +16,20 @@ describe "`tetra generate-all`", type: :aruba do
     cd(File.join("commons-collections", "src", Tetra::CCOLLECTIONS))
 
     # first dry-run, all normal (Interactive & Slow)
-    run_command("tetra dry-run --very-very-verbose", exit_timeout: 240)
-    type("mvn package -DskipTests")
-    type("\u{0004}") # ^D (Ctrl+D)
-    stop_all_commands
+    time_step("source archive workflow: first mvn build") do
+      run_command("tetra dry-run --very-very-verbose", exit_timeout: 240)
+      type("mvn package -DskipTests")
+      type("\u{0004}") # ^D (Ctrl+D)
+      stop_all_commands
+    end
 
     expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
     expect(last_command_started.output).to include("Checking for tetra project")
 
     # first generate-all, all normal
-    run_command_and_stop("tetra generate-all", exit_timeout: 300)
+    time_step("source archive workflow: first generate-all") do
+      run_command_and_stop("tetra generate-all", exit_timeout: 300)
+    end
 
     expect(last_command_started.output).to include("commons-collections-kit.spec generated")
     expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
@@ -43,14 +48,18 @@ describe "`tetra generate-all`", type: :aruba do
     run_command_and_stop("tetra patch")
 
     # third dry-run succeeds with patch (Interactive & Slow)
-    run_command("tetra dry-run", exit_timeout: 240)
-    type("mvn package -DskipTests")
-    type("\u{0004}")
-    stop_all_commands
+    time_step("source archive workflow: second mvn build") do
+      run_command("tetra dry-run", exit_timeout: 240)
+      type("mvn package -DskipTests")
+      type("\u{0004}")
+      stop_all_commands
+    end
 
     expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
 
-    run_command_and_stop("tetra generate-all --very-very-verbose", exit_timeout: 300)
+    time_step("source archive workflow: second generate-all") do
+      run_command_and_stop("tetra generate-all --very-very-verbose", exit_timeout: 300)
+    end
 
     expect(last_command_started.output).to include("commons-collections-kit.spec generated")
     expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
@@ -63,7 +72,9 @@ describe "`tetra generate-all`", type: :aruba do
     expect(spec_path).to have_file_content(/0001-Sources-updated.patch/)
     # rubocop:enable RSpec/ExpectActual
   end
+  # rubocop:enable RSpec/ExampleLength
 
+  # rubocop:disable RSpec/ExampleLength
   it "generates specs and tarballs for a sample package, manual source workflow" do
     # Use binread
     archive_source = File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip")
@@ -90,15 +101,19 @@ describe "`tetra generate-all`", type: :aruba do
     # second dry-run, all normal (Interactive & Slow)
     cd(File.join("src", Tetra::CCOLLECTIONS))
 
-    run_command("tetra dry-run", exit_timeout: 240)
-    type("mvn package -DskipTests")
-    type("\u{0004}")
-    stop_all_commands
+    time_step("manual source workflow: first mvn build") do
+      run_command("tetra dry-run", exit_timeout: 240)
+      type("mvn package -DskipTests")
+      type("\u{0004}")
+      stop_all_commands
+    end
 
     expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
 
     # first generate-all, all normal
-    run_command_and_stop("tetra generate-all", exit_timeout: 120)
+    time_step("manual source workflow: first generate-all") do
+      run_command_and_stop("tetra generate-all", exit_timeout: 120)
+    end
 
     expect(last_command_started.output).to include("commons-collections-kit.spec generated")
     expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
@@ -117,14 +132,18 @@ describe "`tetra generate-all`", type: :aruba do
     run_command_and_stop("tetra patch")
 
     # third dry-run succeeds with patch (Interactive & Slow)
-    run_command("tetra dry-run", exit_timeout: 240)
-    type("mvn package -DskipTests")
-    type("\u{0004}")
-    stop_all_commands
+    time_step("manual source workflow: second mvn build") do
+      run_command("tetra dry-run", exit_timeout: 240)
+      type("mvn package -DskipTests")
+      type("\u{0004}")
+      stop_all_commands
+    end
 
     expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
 
-    run_command_and_stop("tetra generate-all", exit_timeout: 300)
+    time_step("manual source workflow: second generate-all") do
+      run_command_and_stop("tetra generate-all", exit_timeout: 300)
+    end
 
     expect(last_command_started.output).to include("commons-collections-kit.spec generated")
     expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
@@ -138,4 +157,5 @@ describe "`tetra generate-all`", type: :aruba do
     expect(spec_path).to have_file_content(/commons-collections.zip/)
     # rubocop:enable RSpec/ExpectActual
   end
+  # rubocop:enable RSpec/ExampleLength
 end
