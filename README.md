@@ -1,4 +1,6 @@
-[![Tests](https://github.com/uyuni-project/tetra/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/uyuni-project/tetra/actions/workflows/test.yml)
+[![Fine tests](https://github.com/uyuni-project/tetra/actions/workflows/test_fine.yml/badge.svg)](https://github.com/uyuni-project/tetra/actions/workflows/test_fine.yml)
+[![Coarse tests](https://github.com/uyuni-project/tetra/actions/workflows/test_coarse.yml/badge.svg)](https://github.com/uyuni-project/tetra/actions/workflows/test_coarse.yml)
+[![RuboCop](https://github.com/uyuni-project/tetra/actions/workflows/rubocop.yml/badge.svg)](https://github.com/uyuni-project/tetra/actions/workflows/rubocop.yml)
 [![codecov](https://codecov.io/github/uyuni-project/tetra/branch/master/graph/badge.svg?token=iLBGZqGXwa)](https://codecov.io/github/uyuni-project/tetra)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uyuni-project_tetra&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=uyuni-project_tetra)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/6678/badge)](https://www.bestpractices.dev/projects/6678)
