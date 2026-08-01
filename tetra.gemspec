@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.metadata = {
     "bug_tracker_uri" => "https://github.com/uyuni-project/tetra/issues",
-    "homepage_uri" => spec.homepage,
+    "homepage_uri" => "https://rubygems.org/gems/tetra",
     "source_code_uri" => "https://github.com/uyuni-project/tetra",
     "rubygems_mfa_required" => "true",
     "allowed_push_host" => "https://rubygems.org"
