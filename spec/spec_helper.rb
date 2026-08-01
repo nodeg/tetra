@@ -3,6 +3,8 @@
 require "aruba/rspec"
 require "simplecov"
 require "simplecov-cobertura"
+require "vcr"
+require "webmock/rspec"
 require "tetra"
 
 SimpleCov.start do
@@ -11,6 +13,20 @@ SimpleCov.start do
                                                        SimpleCov::Formatter::HTMLFormatter,
                                                        SimpleCov::Formatter::CoberturaFormatter
                                                      ])
+end
+
+VCR.configure do |config|
+  # Where VCR will save the recorded network responses (cassettes)
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+
+  # Tell VCR to use webmock to intercept HTTP requests
+  config.hook_into :webmock
+
+  # Automatically use VCR when a test block has the `vcr: true` metadata tag
+  config.configure_rspec_metadata!
+
+  # Prevents VCR from blocking localhost requests if Aruba or other tools need them
+  config.ignore_localhost = true
 end
 
 Aruba.configure do |config|

@@ -1,0 +1,70 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/does_not_exist/does_not_exist/does_not_exist/does_not_exist-does_not_exist.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - repo1.maven.org
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Sat, 01 Aug 2026 15:13:21 GMT
+      Content-Type:
+      - text/html
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cf-Ray:
+      - a245c94b8f8be0c9-MUC
+      Cf-Cache-Status:
+      - HIT
+      Age:
+      - '775'
+      Last-Modified:
+      - Sat, 11 Oct 2025 00:20:51 GMT
+      X-Amz-Error-Code:
+      - NoSuchKey
+      X-Amz-Error-Detail-Key:
+      - maven2/does_not_exist/does_not_exist/does_not_exist/does_not_exist-does_not_exist.pom
+      X-Amz-Error-Message:
+      - The specified key does not exist.
+      Server:
+      - cloudflare
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |+
+        <html>
+        <head><title>404 Not Found</title></head>
+        <body bgcolor="white">
+        <center><h1>404 Not Found</h1></center>
+        <hr><center>nginx</center>
+        </body>
+        </html>
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+
+
+
+  recorded_at: Sat, 01 Aug 2026 15:13:21 GMT
+recorded_with: VCR 6.4.0
+...
