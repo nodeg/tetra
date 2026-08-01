@@ -167,7 +167,7 @@ module Tetra
         # This streams stdout from git directly to stdin of xz without loading
         # data into Ruby memory (which could be big).
         git_command = ["git", "archive", "--format=tar", id, "--", directory]
-        xz_command  = ["xz", "-9e"]
+        xz_command  = ["xz", "-6", "-T0"]
 
         statuses = Open3.pipeline(git_command, xz_command, out: destination_path)
 

@@ -20,8 +20,25 @@ Aruba.configure do |config|
   config.io_wait_timeout = 2
 end
 
+module Tetra
+  # Diagnostic-only helper: wraps a block and prints its wall-clock duration
+  # to real stdout (visible in the raw CI log regardless of RSpec formatter),
+  # so we can see which step - the mvn build vs. generate-all's kit
+  # archiving - actually dominates the coarse specs' wall time.
+  # Remove once the real bottleneck is confirmed.
+  module StepTiming
+    def time_step(label)
+      start = Time.now
+      result = yield
+      $stdout.puts "[TIMING] #{label}: #{(Time.now - start).round(2)}s"
+      result
+    end
+  end
+end
+
 RSpec.configure do |config|
   config.include Aruba::Api
+  config.include Tetra::StepTiming, type: :aruba
   # If running in a CI environment, use the verbose 'documentation' formatter
   config.formatter = :documentation if ENV["CI"]
 
