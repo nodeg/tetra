@@ -27,7 +27,7 @@ module Tetra
       end
 
       # inits a new project directory structure
-      def init(dir, include_bundled_software = true)
+      def init(dir, include_bundled_software: true)
         Dir.mkdir(dir)
 
         # Avoid Dir.chdir(dir). Use absolute paths instead.

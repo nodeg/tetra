@@ -2,8 +2,10 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/SpecFilePathFormat
 describe Tetra::PomGetter do
-  let(:pom_getter) { Tetra::PomGetter.new }
+  # rubocop:enable RSpec/SpecFilePathFormat
+  let(:pom_getter) { described_class.new }
 
   describe "#get_pom" do
     it "gets the pom from a jar" do
@@ -12,7 +14,7 @@ describe Tetra::PomGetter do
       path, status = pom_getter.get_pom(jar_path)
 
       expect(status).to eq :found_in_jar
-      expect(File.exist?(path)).to be_truthy
+      expect(File).to exist(path)
 
       FileUtils.rm(path)
     end
@@ -23,7 +25,7 @@ describe Tetra::PomGetter do
       path, status = pom_getter.get_pom(jar_path)
 
       expect(status).to eq :found_via_sha1
-      expect(File.exist?(path)).to be_truthy
+      expect(File).to exist(path)
 
       FileUtils.rm(path)
     end
@@ -34,7 +36,7 @@ describe Tetra::PomGetter do
       path, status = pom_getter.get_pom(jar_path)
 
       expect(status).to eq :found_via_heuristic
-      expect(File.exist?(path)).to be_truthy
+      expect(File).to exist(path)
 
       FileUtils.rm(path)
     end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Tetra
   # encapsulates tetra-specific Ant commandline options
   class Ant

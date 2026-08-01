@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Tetra
   # encapsulates tetra-specific Maven commandline options
   class Mvn
@@ -19,7 +20,7 @@ module Tetra
         "--strict-checksums"
       ]
 
-      "#{executable} #{options.join(' ')}"
+      "#{executable} #{options.join(" ")}"
     end
   end
 end

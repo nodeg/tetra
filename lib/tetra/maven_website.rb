@@ -10,8 +10,8 @@ module Tetra
     include Logging
 
     # API Constants
-    SEARCH_API = "https://search.maven.org/solrsearch/select".freeze
-    DOWNLOAD_API = "https://repo1.maven.org/maven2".freeze
+    SEARCH_API = "https://search.maven.org/solrsearch/select"
+    DOWNLOAD_API = "https://repo1.maven.org/maven2"
 
     def search_by_sha1(sha1)
       search(q: "1:\"#{sha1}\"")
@@ -84,9 +84,9 @@ module Tetra
           # Recursive call to follow redirect (params are usually part of the new URL)
           fetch(location, {}, limit - 1)
         when Net::HTTPNotFound
-          fail NotFoundOnMavenWebsiteError
+          raise NotFoundOnMavenWebsiteError
         else
-          fail "Remote error: #{response.code} #{response.message}"
+          raise "Remote error: #{response.code} #{response.message}"
         end
       rescue Net::OpenTimeout, Net::ReadTimeout, SocketError, Errno::ECONNRESET => e
         if (retries += 1) <= 3

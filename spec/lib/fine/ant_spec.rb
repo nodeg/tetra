@@ -2,23 +2,28 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/SpecFilePathFormat
 describe Tetra::Ant do
+  # rubocop:enable RSpec/SpecFilePathFormat
   include Tetra::Mockers
 
-  before(:each) do
-    create_mock_project
-    @path = create_mock_executable("ant")
+  let(:project) { create_mock_project }
+  let(:path) { create_mock_executable("ant") }
+
+  before do
+    project
+    path
   end
 
-  after(:each) do
+  after do
     delete_mock_project
   end
 
-  describe "#get_ant_commandline"  do
+  describe "#get_ant_commandline" do
     it "returns commandline options for running Ant" do
-      @project.from_directory do
-        commandline = Tetra::Ant.commandline(".", mock_executable_dir("ant"))
-        expect(commandline).to eq File.join(".", @path)
+      project.from_directory do
+        commandline = described_class.commandline(".", mock_executable_dir("ant"))
+        expect(commandline).to eq File.join(".", path)
       end
     end
   end

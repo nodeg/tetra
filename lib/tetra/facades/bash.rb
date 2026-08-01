@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Tetra
   # runs Bash with tetra-specific options
   class Bash
@@ -44,7 +45,7 @@ module Tetra
             # The 'bash -c' flag normally takes a single string, so we must be careful.
             # Ideally, passing it as a single array element ["bash", ..., "-c", command]
             # is handled safely by ProcessRunner if it uses exec/system/spawn.
-            run(["bash", "--rcfile", bashrc_file.path, "-i", "-c", command])
+            run(["bash", "--rcfile", bashrc_file.path, "-i", "-c", command], echo: false, stdin_data: nil)
             [command]
           else
             # Interactive mode

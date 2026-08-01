@@ -5,7 +5,7 @@ module Tetra
   class InitSubcommand < Tetra::Subcommand
     parameter "PACKAGE_NAME", "name of the package to create"
     parameter "[SOURCE_ARCHIVE]", "source tarball or zipfile"
-    option %w(-n --no-archive), :flag, "create a project without a source archive (see SPECIAL_CASES.md)",
+    option %w[-n --no-archive], :flag, "create a project without a source archive (see SPECIAL_CASES.md)",
            default: false
 
     def execute
@@ -16,9 +16,7 @@ module Tetra
         end
 
         # Ensure the file exists if provided
-        if source_archive && !File.readable?(source_archive)
-          signal_usage_error "#{source_archive} is not a file or it is not readable."
-        end
+        signal_usage_error "#{source_archive} is not a file or it is not readable." if source_archive && !File.readable?(source_archive)
 
         Tetra::Project.init(package_name)
         project = Tetra::Project.new(package_name)

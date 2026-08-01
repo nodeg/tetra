@@ -2,10 +2,12 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/SpecFilePathFormat
 describe Tetra::Pom do
-  let(:commons_pom) { Tetra::Pom.new(File.join("spec", "data", "commons-logging", "pom.xml")) }
-  let(:nailgun_pom) { Tetra::Pom.new(File.join("spec", "data", "nailgun", "pom.xml")) }
-  let(:struts_apps_pom) { Tetra::Pom.new(File.join("spec", "data", "struts-apps", "pom.xml")) }
+  # rubocop:enable RSpec/SpecFilePathFormat
+  let(:commons_pom) { described_class.new(File.join("spec", "data", "commons-logging", "pom.xml")) }
+  let(:nailgun_pom) { described_class.new(File.join("spec", "data", "nailgun", "pom.xml")) }
+  let(:struts_apps_pom) { described_class.new(File.join("spec", "data", "struts-apps", "pom.xml")) }
 
   describe "#group_id" do
     it "reads the group id" do
@@ -45,12 +47,12 @@ describe Tetra::Pom do
       expect(commons_pom.description).to eq "Apache Commons Logging is a thin adapter allowing configurable bridging to other,\n    well-known logging systems."
       normalized_description = nailgun_pom.description.gsub(/[ \t]+$/, "")
 
-      expect(normalized_description).to eq "Nailgun is a client, protocol, and server for running Java programs\n" \
-                                           "        from the command line without incurring the JVM startup overhead.\n" \
-                                           "        Programs run in the server (which is implemented in Java), and are\n" \
-                                           "        triggered by the client (written in C), which handles all I/O.\n" \
-                                           "\n" \
-                                           "        This project contains the server and examples."
+      expect(normalized_description).to eq "Nailgun is a client, protocol, and server for running Java programs\n        " \
+                                           "from the command line without incurring the JVM startup overhead.\n        " \
+                                           "Programs run in the server (which is implemented in Java), and are\n        " \
+                                           "triggered by the client (written in C), which handles all I/O.\n" \
+                                           "\n        " \
+                                           "This project contains the server and examples."
       expect(struts_apps_pom.description).to eq "Apache Struts 2"
     end
   end

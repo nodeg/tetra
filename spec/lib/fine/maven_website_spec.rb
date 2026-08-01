@@ -2,8 +2,10 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/SpecFilePathFormat
 describe Tetra::MavenWebsite do
-  let(:site) { Tetra::MavenWebsite.new }
+  # rubocop:enable RSpec/SpecFilePathFormat
+  let(:site) { described_class.new }
 
   describe "#search_by_sha1" do
     it "uses search.maven.org to look for poms by jar SHA1" do
@@ -28,7 +30,7 @@ describe Tetra::MavenWebsite do
     it "uses search.maven.org to look for poms by group and artifact id" do
       results = site.search_by_group_id_and_artifact_id("antlr", "antlrall")
 
-      expect(results.any? { |result| result["id"] == "antlr:antlrall:2.7.2" }).to be_truthy
+      expect(results).to(be_any { |result| result["id"] == "antlr:antlrall:2.7.2" })
     end
   end
 

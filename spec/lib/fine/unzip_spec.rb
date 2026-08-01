@@ -2,13 +2,15 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/SpecFilePathFormat
 describe Tetra::Unzip do
+  # rubocop:enable RSpec/SpecFilePathFormat
   include Tetra::Mockers
 
   let(:zipfile) { File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip") }
-  let(:unzip) { Tetra::Unzip.new }
+  let(:unzip) { described_class.new }
 
-  describe "#decompress"  do
+  describe "#decompress" do
     it "decompresses a file in a directory" do
       Dir.mktmpdir do |dir|
         unzip.decompress(zipfile, dir)

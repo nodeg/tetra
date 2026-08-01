@@ -2,8 +2,10 @@
 
 require "spec_helper"
 
+# rubocop:disable RSpec/SpecFilePathFormat
 describe Tetra::VersionMatcher do
-  let(:v_matcher) { Tetra::VersionMatcher.new }
+  # rubocop:enable RSpec/SpecFilePathFormat
+  let(:v_matcher) { described_class.new }
 
   describe "#split_version" do
     it "splits full names into names and version numbers" do

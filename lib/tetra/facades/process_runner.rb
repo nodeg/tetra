@@ -8,7 +8,7 @@ module Tetra
     # runs a noninteractive executable and returns its output as a string
     # raises ExecutionFailed if the exit status is not 0
     # optionally echoes the executable's output/error to standard output/error
-    def run(commandline, echo = false, stdin_data = nil)
+    def run(commandline, echo: false, stdin_data: nil)
       log.debug "running `#{commandline}`"
 
       out_buffer = StringIO.new
@@ -35,7 +35,7 @@ module Tetra
 
       log.debug "`#{command}` exited with success #{success}"
 
-      fail ExecutionFailed.new(command, $CHILD_STATUS.exitstatus, nil, nil) unless success
+      raise ExecutionFailed.new(command, $CHILD_STATUS.exitstatus, nil, nil) unless success
     end
 
     private
@@ -77,16 +77,13 @@ module Tetra
         log.warn(err) unless err.empty?
       end
 
-      fail ExecutionFailed.new(commandline, exit_status.exitstatus, out, err)
+      raise ExecutionFailed.new(commandline, exit_status.exitstatus, out, err)
     end
   end
 
   # raised when a command returns a non-zero status
   class ExecutionFailed < StandardError
-    attr_reader :commandline
-    attr_reader :status
-    attr_reader :out
-    attr_reader :err
+    attr_reader :commandline, :status, :out, :err
 
     def initialize(commandline, status, out, err)
       @commandline = commandline

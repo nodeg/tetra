@@ -15,14 +15,11 @@ module Tetra
           path, status = pom_getter.get_pom(name)
 
           if path
-            text_status = case status
-                          when :found_in_jar
-                            "was inside the jar"
-                          when :found_via_sha1
-                            "found by sha1 search from search.maven.org"
-                          when :found_via_heuristic
-                            "found by heuristic search from search.maven.org"
-                          end
+            text_status = {
+              found_in_jar: "was inside the jar",
+              found_via_sha1: "found by sha1 search from search.maven.org",
+              found_via_heuristic: "found by heuristic search from search.maven.org"
+            }[status]
 
             puts "#{format_path(path, project)} written, #{text_status}"
           else
