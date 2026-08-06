@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <!--
       Note that due to the special requirements of logging unit-tests, most
       tests are executed in the "integration-test" phase rather than the
@@ -26,7 +26,7 @@ under the License.
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>72</version>
+    <version>79</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-logging</groupId>
@@ -53,11 +53,11 @@ under the License.
     <commons.rc.version>RC1</commons.rc.version>
     <skipSurefireReport>true</skipSurefireReport>
     <!-- Since version 3.2 additional classpath dependencies are allowed. -->
-    <commons.failsafe.version>3.2.1</commons.failsafe.version>
+    <commons.failsafe.version>3.5.2</commons.failsafe.version>
     <!-- Allow default test run order to be changed -->
     <failsafe.runorder>filesystem</failsafe.runorder>
     <log4j2.version>2.25.4</log4j2.version>
-    <logback.version>1.5.35</logback.version>
+    <logback.version>1.3.15</logback.version>
     <slf4j.version>2.0.16</slf4j.version>
     <findsecbugs.version>1.13.0</findsecbugs.version>
     <commons.osgi.import>
@@ -95,22 +95,11 @@ under the License.
     <!-- TODO spotbugs:check -->
     <defaultGoal>clean verify apache-rat:check japicmp:cmp javadoc:javadoc checkstyle:check pmd:check</defaultGoal>
     <plugins>
-      <!--
-          We want to create four jarfiles from this project: normal, tests, api
-          and adapters. The first two are handled by the normal jar:jar and
-          jar:test-jar targets.
-          The jar plugin with some includes/excludes is used to create the other
-          ones.
-        -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
-            <!--
-                The custom test framework requires the unit test code to be
-                in a jarfile so it can control its place in the classpath.
-              -->
             <id>create-test-jar</id>
             <phase>package</phase>
             <goals>
@@ -191,14 +180,6 @@ under the License.
         </executions>
       </plugin>
       <plugin>
-        <!--
-            Many of JCL's tests use tricky techniques to place the generated
-            JCL jarfiles on the classpath in various configurations. This means
-            that those tests must be run *after* the "package" build phase.
-
-            In order to not mess with the Ant build we "disable" the normal test
-            phase. This is done by skipping the execution of the surefire plugin.
-          -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
@@ -206,14 +187,6 @@ under the License.
         </configuration>
       </plugin>
       <plugin>
-        <!--
-            Many of JCL's tests use tricky techniques to place the generated
-            JCL jarfiles on the classpath in various configurations. This means
-            that those tests must be run *after* the "package" build phase.
-
-            Disable cobertura report generation as this does not work correctly
-            with integration-tests and the normal unit tests are disabled too.
-          -->
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
         <version>${commons.cobertura.version}</version>
@@ -241,17 +214,8 @@ under the License.
         </executions>
       </plugin>
       <plugin>
-        <!--
-            Many of JCL's tests use tricky techniques to place the generated
-            JCL jarfiles on the classpath in various configurations. This means
-            that those tests must be run *after* the "package" build phase.
-
-            For this we use the failsafe plugin which is bound to the
-            "integration-test" phase by default.
-          -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <!-- Span a different JVM per test -->
         <configuration>
           <reuseForks>false</reuseForks>
         </configuration>
@@ -279,9 +243,6 @@ under the License.
                 <include>**/*TestCase.java</include>
               </includes>
               <systemPropertyVariables>
-                <!--
-                  <org.apache.commons.logging.diagnostics.dest>STDOUT</org.apache.commons.logging.diagnostics.dest>
-                -->
                 <log4j12>${org.apache.logging.log4j:log4j-1.2-api:jar}</log4j12>
                 <log4j-api>${org.apache.logging.log4j:log4j-api:jar}</log4j-api>
                 <logkit>${logkit:logkit:jar}</logkit>
@@ -294,10 +255,6 @@ under the License.
               </systemPropertyVariables>
             </configuration>
           </execution>
-          <!--
-              The ServiceLoaderTestCase uses a custom implementation of LogFactory,
-              therefore it requires a separate execution.
-            -->
           <execution>
             <id>serviceLoader-test</id>
             <goals>
@@ -312,9 +269,6 @@ under the License.
               </includes>
             </configuration>
           </execution>
-          <!--
-              Tests logging through the Log4j 2 API.
-            -->
           <execution>
             <id>log4j-test</id>
             <goals>
@@ -332,18 +286,10 @@ under the License.
                 <include>org/apache/commons/logging/log4j2/*TestCase.java</include>
               </includes>
               <systemPropertyVariables>
-                <!-- Due to a bug in `log4j-core-test`,
-                     the default LogEventFactory loses the location info.
-                     We need to force the usage of the reusable version.
-                <log4j2.messageFactory>org.apache.logging.log4j.message.ParameterizedMessageFactory</log4j2.messageFactory>
-                  -->
                 <log4j2.logEventFactory>org.apache.logging.log4j.core.impl.ReusableLogEventFactory</log4j2.logEventFactory>
               </systemPropertyVariables>
             </configuration>
           </execution>
-          <!--
-              Tests logging through the Log4j 2 API for 1.2.
-            -->
           <execution>
             <id>log4j12-test</id>
             <goals>
@@ -371,11 +317,6 @@ under the License.
                 <include>org/apache/commons/logging/log4j/log4j12/*TestCase.java</include>
               </includes>
               <systemPropertyVariables>
-                <!-- Due to a bug in `log4j-core-test`,
-                     the default LogEventFactory loses the location info.
-                     We need to force the usage of the reusable version.
-                <log4j2.messageFactory>org.apache.logging.log4j.message.ParameterizedMessageFactory</log4j2.messageFactory>
-                   -->
                 <log4j2.logEventFactory>org.apache.logging.log4j.core.impl.ReusableLogEventFactory</log4j2.logEventFactory>
                 <log4j12>${org.apache.logging.log4j:log4j-1.2-api:jar}</log4j12>
                 <log4j2-api>${org.apache.logging.log4j:log4j-api:jar}</log4j2-api>
@@ -383,14 +324,10 @@ under the License.
                 <commons-logging>target/${project.build.finalName}.jar</commons-logging>
                 <commons-logging-api>target/${project.build.finalName}-api.jar</commons-logging-api>
                 <testclasses>target/${project.build.finalName}-tests.jar</testclasses>
-                <!-- Use the Log4j 1.2 version of Log -->
                 <org.apache.commons.logging.LogFactory>org.apache.commons.logging.impl.LogFactoryImpl</org.apache.commons.logging.LogFactory>
               </systemPropertyVariables>
             </configuration>
           </execution>
-          <!--
-              Tests falling back to the SLF4J API, when the Log4j API is absent.
-          -->
           <execution>
             <id>slf4j-test</id>
             <goals>
@@ -413,9 +350,6 @@ under the License.
               </includes>
             </configuration>
           </execution>
-          <!--
-              Tests falling back to the SLF4J API, when the Log4j API is present, but redirected to SLF4J.
-          -->
           <execution>
             <id>log4j-to-slf4j-test</id>
             <goals>
@@ -427,7 +361,6 @@ under the License.
                   <groupId>org.apache.logging.log4j</groupId>
                   <artifactId>log4j-to-slf4j</artifactId>
                   <version>${log4j2.version}</version>
-                  <!-- Conflicts with the version used by the project -->
                   <exclusions>
                     <exclusion>
                       <groupId>org.slf4j</groupId>
@@ -458,7 +391,6 @@ under the License.
           <tarLongFileMode>gnu</tarLongFileMode>
         </configuration>
       </plugin>
-      <!-- Define properties for referencing dependencies -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -513,9 +445,6 @@ under the License.
             </plugins>
           </configuration>
       </plugin>
-      <!--
-          Ban Commons Logging clones
-        -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
@@ -602,7 +531,7 @@ under the License.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.16.0</version>
+      <version>3.17.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -617,7 +546,6 @@ under the License.
       <version>${log4j2.version}</version>
       <scope>test</scope>
       <exclusions>
-        <!-- Commons Logging clone -->
         <exclusion>
           <groupId>org.springframework</groupId>
           <artifactId>spring-jcl</artifactId>
